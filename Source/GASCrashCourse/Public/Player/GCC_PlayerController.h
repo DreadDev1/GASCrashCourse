@@ -34,6 +34,13 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Crash|Input|Abilities")
 	TObjectPtr<UInputAction> PrimaryAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Crash|Input|Abilities")
+	TObjectPtr<UInputAction> SecondaryAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Crash|Input|Abilities")
+	TObjectPtr<UInputAction> TertiaryAction;
+	
 #pragma endregion
 #pragma region Input Actions Functions
 	void Jump();
@@ -41,6 +48,8 @@ private:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Primary();
+	void Secondary();
+	void Tertiary();
 #pragma endregion
 
 void ActivateAbility(const FGameplayTag& AbilityTag) const;
