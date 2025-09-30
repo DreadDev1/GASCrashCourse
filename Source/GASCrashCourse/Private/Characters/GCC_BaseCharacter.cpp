@@ -1,7 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GCC_BaseCharacter.h"
+
+#include "Characters/GCC_BaseCharacter.h"
+
 
 
 // Sets default values
