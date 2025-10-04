@@ -3,21 +3,41 @@
 
 #include "AbilitySystem/GCC_AbilitySystemComponent.h"
 
-UGCC_AbilitySystemComponent::UGCC_AbilitySystemComponent()
+#include "GameplayTags/GCC_Tags.h"
+
+void UGCC_AbilitySystemComponent::OnGiveAbility(FGameplayAbilitySpec& AbilitySpec)
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	Super::OnGiveAbility(AbilitySpec);
+
+	if (!AbilitySpec.Ability) return;
+	for (const FGameplayTag& Tag : AbilitySpec.Ability->GetAssetTags())
+	{
+		if (Tag.MatchesTagExact(GCC_Tags::GCC_Abilities::ActivateOnGiven))
+		{
+			TryActivateAbility(AbilitySpec.Handle);
+		}
+	}
 }
 
-void UGCC_AbilitySystemComponent::BeginPlay()
+void UGCC_AbilitySystemComponent::OnRep_ActivateAbilities()
 {
-	Super::BeginPlay();	
+	Super::OnRep_ActivateAbilities();
+
+	FScopedAbilityListLock ActiveScopeLock(*this);
+	for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		HandleAutoActivatedAbility(AbilitySpec);
+	}
 }
 
-
-// Called every frame
-void UGCC_AbilitySystemComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                                FActorComponentTickFunction* ThisTickFunction)
+void UGCC_AbilitySystemComponent::HandleAutoActivatedAbility(const FGameplayAbilitySpec& AbilitySpec)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	for (const FGameplayTag& Tag : AbilitySpec.Ability->GetAssetTags())
+	{
+		if (Tag.MatchesTagExact(GCC_Tags::GCC_Abilities::ActivateOnGiven))
+		{
+			TryActivateAbility(AbilitySpec.Handle);
+			return;
+		}
+	}
 }
-
