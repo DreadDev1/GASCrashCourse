@@ -35,6 +35,7 @@ void AGCC_PlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(TertiaryAction, ETriggerEvent::Started, this, &ThisClass::Tertiary);
 }
 
+#pragma region Input Actions Movement
 void AGCC_PlayerController::Jump()
 {
 	if (!IsValid(GetCharacter())) return;
@@ -71,7 +72,8 @@ void AGCC_PlayerController::Look(const FInputActionValue& Value)
 	AddYawInput(LookAxisVector.X);
 	AddPitchInput(LookAxisVector.Y);
 }
-
+#pragma endregion
+#pragma region Input Actions Abilities
 void AGCC_PlayerController::Primary()
 {
 	ActivateAbility(GCC_Tags::GCC_Abilities::Primary);
@@ -86,7 +88,7 @@ void AGCC_PlayerController::Tertiary()
 {
 	ActivateAbility(GCC_Tags::GCC_Abilities::Tertiary);
 }
-
+#pragma endregion
 void AGCC_PlayerController::ActivateAbility(const FGameplayTag& AbilityTag) const
 {
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn());
