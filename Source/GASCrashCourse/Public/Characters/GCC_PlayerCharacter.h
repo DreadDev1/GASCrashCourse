@@ -6,13 +6,16 @@
 #include "GCC_BaseCharacter.h"
 #include "GCC_PlayerCharacter.generated.h"
 
+class UCameraComponent;
+class USpringArmComponent;
+
 UCLASS()
 class GASCRASHCOURSE_API AGCC_PlayerCharacter : public AGCC_BaseCharacter
 {
 	GENERATED_BODY()
 
 public:
-	GACC_PlayerCharacter();
+	AGCC_PlayerCharacter();
 
 private:
 
