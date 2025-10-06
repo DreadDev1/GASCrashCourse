@@ -2,9 +2,13 @@
 
 
 #include "GASCrashCourse/Public/Player/GCC_PlayerController.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "GameFramework/Character.h"
+#include "GameplayTags/GCC_Tags.h"
 
 void AGCC_PlayerController::SetupInputComponent()
 {
@@ -68,5 +72,13 @@ void AGCC_PlayerController::Look(const FInputActionValue& Value)
 
 void AGCC_PlayerController::Primary()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Primary"));
+	ActivateAbility(GCCTags::GCCAbilities::Primary);
+}
+
+void AGCC_PlayerController::ActivateAbility(const FGameplayTag& AbilityTag) const
+{
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn());
+	if (!IsValid(ASC)) return;
+
+	ASC->TryActivateAbilitiesByTag(AbilityTag.GetSingleTagContainer());
 }
