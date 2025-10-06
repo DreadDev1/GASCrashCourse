@@ -8,6 +8,7 @@
 
 #include "GCC_BaseCharacter.generated.h"
 
+class UGameplayAbility;
 UCLASS(Abstract)
 class GASCRASHCOURSE_API AGCC_BaseCharacter : public ACharacter, public IAbilitySystemInterface
 {
@@ -16,4 +17,11 @@ class GASCRASHCOURSE_API AGCC_BaseCharacter : public ACharacter, public IAbility
 public:
 	AGCC_BaseCharacter();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+protected:
+	void GiveStartupAbilities();
+private:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Crash|Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 };
