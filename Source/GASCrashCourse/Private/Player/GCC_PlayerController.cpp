@@ -31,6 +31,8 @@ void AGCC_PlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
 
 	EnhancedInputComponent->BindAction(PrimaryAction, ETriggerEvent::Started, this, &ThisClass::Primary);
+	EnhancedInputComponent->BindAction(SecondaryAction, ETriggerEvent::Started, this, &ThisClass::Secondary);
+	EnhancedInputComponent->BindAction(TertiaryAction, ETriggerEvent::Started, this, &ThisClass::Tertiary);
 }
 
 void AGCC_PlayerController::Jump()
@@ -73,6 +75,16 @@ void AGCC_PlayerController::Look(const FInputActionValue& Value)
 void AGCC_PlayerController::Primary()
 {
 	ActivateAbility(GCCTags::GCCAbilities::Primary);
+}
+
+void AGCC_PlayerController::Secondary()
+{
+	ActivateAbility(GCCTags::GCCAbilities::Secondary);
+}
+
+void AGCC_PlayerController::Tertiary()
+{
+	ActivateAbility(GCCTags::GCCAbilities::Tertiary);
 }
 
 void AGCC_PlayerController::ActivateAbility(const FGameplayTag& AbilityTag) const
