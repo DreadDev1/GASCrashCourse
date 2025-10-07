@@ -2,13 +2,13 @@
 
 
 #include "Player/GCC_PlayerState.h"
-#include "AbilitySystemComponent.h"
+#include "AbilitySystem/GCC_AbilitySystemComponent.h"
 
 AGCC_PlayerState::AGCC_PlayerState()
 {
 	SetNetUpdateFrequency(100.f);
 
-	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>("AbilitySystemComponent");
+	AbilitySystemComponent = CreateDefaultSubobject<UGCC_AbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 	
