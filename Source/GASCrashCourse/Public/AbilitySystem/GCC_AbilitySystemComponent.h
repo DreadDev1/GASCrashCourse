@@ -13,13 +13,10 @@ class GASCRASHCOURSE_API UGCC_AbilitySystemComponent : public UAbilitySystemComp
 	GENERATED_BODY()
 
 public:
-	UGCC_AbilitySystemComponent();
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void OnGiveAbility(FGameplayAbilitySpec& AbilitySpec) override;
+	virtual void OnRep_ActivateAbilities() override;
 
-protected:
-	virtual void BeginPlay() override;
+private:
 
-
-	
+	void HandleAutoActivatedAbility(const FGameplayAbilitySpec& AbilitySpec);	
 };
