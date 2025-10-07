@@ -3,9 +3,11 @@
 
 #include "AbilitySystem/Abilities/Player/GCC_Primary.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "Engine/OverlapResult.h"
+#include "GameplayTags/GCC_Tags.h"
 
-void UGCC_Primary::HitBoxOverlapTest()
+TArray<AActor*> UGCC_Primary::HitBoxOverlapTest()
 {
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(GetAvatarActorFromActorInfo());
@@ -26,18 +28,42 @@ void UGCC_Primary::HitBoxOverlapTest()
 	
 	GetWorld()->OverlapMultiByChannel(OverlapResults, HitBoxLocation, FQuat::Identity, ECC_Visibility, Sphere, QueryParams, ResponseParams);
 
+	TArray<AActor*> ActorsHit;
+	for (const FOverlapResult& Result : OverlapResults)
+	{
+		if (!IsValid(Result.GetActor())) continue;
+		ActorsHit.AddUnique(Result.GetActor());
+	}
+	
 	if (bDrawDebugs)
 	{
-		DrawDebugSphere(GetWorld(), HitBoxLocation, HitBoxRadius, 16, FColor::Red, false, 3.f);
+		DrawHitBoxOverlapDebugs(OverlapResults, HitBoxLocation);
+	}
 
-		for (const FOverlapResult& Result : OverlapResults)
+	return ActorsHit;
+}
+
+void UGCC_Primary::SendHitReactEventToActors(const TArray<AActor*>& ActorsHit)
+{
+	for (AActor* HitActor : ActorsHit)
+	{		
+		FGameplayEventData Payload;
+		Payload.Instigator = GetAvatarActorFromActorInfo();
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(HitActor, GCCTags::Events::Enemy::HitReact, Payload);
+	}
+}
+
+void UGCC_Primary::DrawHitBoxOverlapDebugs(const TArray<FOverlapResult>& OverlapResults, const FVector& HitBoxLocation) const
+{
+	DrawDebugSphere(GetWorld(), HitBoxLocation, HitBoxRadius, 16, FColor::Red, false, 3.f);
+
+	for (const FOverlapResult& Result : OverlapResults)
+	{
+		if (IsValid(Result.GetActor()))
 		{
-			if (IsValid(Result.GetActor()))
-			{
-				FVector DebugLocation = Result.GetActor()->GetActorLocation();
-				DebugLocation.Z += 100.f;
-				DrawDebugSphere(GetWorld(), DebugLocation, 30.f, 10, FColor::Green, false, 3.f);
-			}
+			FVector DebugLocation = Result.GetActor()->GetActorLocation();
+			DebugLocation.Z += 100.f;
+			DrawDebugSphere(GetWorld(), DebugLocation, 30.f, 10, FColor::Green, false, 3.f);
 		}
 	}
 }
