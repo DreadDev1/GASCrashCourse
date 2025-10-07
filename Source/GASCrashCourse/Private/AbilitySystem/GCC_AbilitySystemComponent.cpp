@@ -29,7 +29,7 @@ void UGCC_AbilitySystemComponent::HandleAutoActivatedAbility(const FGameplayAbil
 
 	for (const FGameplayTag& Tag : AbilitySpec.Ability->GetAssetTags())
 	{
-		if (Tag.MatchesTagExact(GCCTags::GCCAbilities::ActivateOnGiven))
+		if (Tag.MatchesTagExact(GCCTags::Abilities::ActivateOnGiven))
 		{
 			TryActivateAbility(AbilitySpec.Handle);
 			return;
