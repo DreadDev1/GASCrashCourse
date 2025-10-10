@@ -33,5 +33,6 @@ void AGCC_EnemyCharacter::BeginPlay()
 
 	if (!HasAuthority()) return;
 
-	GiveStartupAbilities();	
+	GiveStartupAbilities();
+	InitializeAttributes();
 }

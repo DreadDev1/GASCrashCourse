@@ -9,6 +9,8 @@
 #include "GCC_BaseCharacter.generated.h"
 
 class UGameplayAbility;
+class UGameplayEffect;
+
 UCLASS(Abstract)
 class GASCRASHCOURSE_API AGCC_BaseCharacter : public ACharacter, public IAbilitySystemInterface
 {
@@ -20,8 +22,13 @@ public:
 
 protected:
 	void GiveStartupAbilities();
+	void InitializeAttributes() const;
+	
 private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Crash|Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Crash|Effects")
+	TSubclassOf<UGameplayEffect> InitializeAttributesEffect;
 };
