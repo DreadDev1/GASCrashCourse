@@ -2,6 +2,8 @@
 
 
 #include "AbilitySystem/GCC_AttributeSet.h"
+
+#include "GameplayEffectExtension.h"
 #include "Net/UnrealNetwork.h"
 
 void UGCC_AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -12,6 +14,27 @@ void UGCC_AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, Mana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, MaxMana, COND_None, REPNOTIFY_Always);
+	
+	DOREPLIFETIME(ThisClass, bAttributeInitialized);
+}
+
+void UGCC_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+{
+	Super::PostGameplayEffectExecute(Data);
+
+	if (!bAttributeInitialized)
+	{
+		bAttributeInitialized = true;
+		OnAttributesInitialized.Broadcast();
+	}
+}
+
+void UGCC_AttributeSet::OnRep_AttributeInitialized()
+{
+	if (!bAttributeInitialized)
+	{
+		OnAttributesInitialized.Broadcast();
+	}
 }
 
 void UGCC_AttributeSet::OnRep_Health(const FGameplayAttributeData& OldValue)

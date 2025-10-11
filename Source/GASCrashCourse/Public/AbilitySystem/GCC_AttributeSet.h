@@ -14,12 +14,24 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAttributesInitialized);
+
 UCLASS()
 class GASCRASHCOURSE_API UGCC_AttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+
+	UPROPERTY(BlueprintAssignable)
+	FAttributesInitialized OnAttributesInitialized;
+	
+	UPROPERTY(ReplicatedUsing = OnRep_AttributeInitialized)
+	bool bAttributeInitialized = false;
+
+	UFUNCTION()
+	void OnRep_AttributeInitialized();
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health)
 	FGameplayAttributeData Health;
