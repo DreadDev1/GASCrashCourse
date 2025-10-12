@@ -83,5 +83,11 @@ void UGCC_WidgetComponent::BindWidgetToAttributeChanges(UWidget* WidgetObject, c
 	{
 		AttributeWidget->OnAttributeChange(Pair, AttributeSet.Get()); // For changes during the game.
 	});
+
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value).AddLambda(
+		[this, AttributeWidget, &Pair](const FOnAttributeChangeData& AttributeChangeData)
+	{
+		AttributeWidget->OnAttributeChange(Pair, AttributeSet.Get()); // For changes during the game.
+	});
 }
 

@@ -3,6 +3,7 @@
 
 #include "GASCrashCourse/Public/Characters/GCC_BaseCharacter.h"
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/GCC_AttributeSet.h"
 
 AGCC_BaseCharacter::AGCC_BaseCharacter()
 {
