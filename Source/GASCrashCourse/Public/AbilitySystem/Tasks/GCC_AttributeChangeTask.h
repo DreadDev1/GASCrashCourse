@@ -11,7 +11,7 @@ struct FOnAttributeChangeData;
 class UAbilitySystemComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnAttributeChanged, FGameplayAttribute, Attribute, float, NewValue, float, OldValue);
-UCLASS()
+UCLASS(BlueprintType, meta = (ExposedAsyncProxy = AsyncTask))
 class GASCRASHCOURSE_API UGCC_AttributeChangeTask : public UBlueprintAsyncActionBase
 {
 	GENERATED_BODY()
