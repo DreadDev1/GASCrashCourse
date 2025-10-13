@@ -4,6 +4,7 @@
 #include "GASCrashCourse/Public/Characters/GCC_PlayerCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/GCC_AttributeSet.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -66,6 +67,12 @@ void AGCC_PlayerCharacter::PossessedBy(AController* NewController)
 	OnASCInitialized.Broadcast(GetAbilitySystemComponent(), GetAttributeSet());
 	GiveStartupAbilities();
 	InitializeAttributes();
+
+	UGCC_AttributeSet* GCC_AttributeSet = Cast<UGCC_AttributeSet>(GetAttributeSet());
+	if (!IsValid(GCC_AttributeSet)) return;
+	
+	GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(GCC_AttributeSet->GetHealthAttribute()).AddUObject(this, &ThisClass::OnHealthChanged);
+
 }
 
 void AGCC_PlayerCharacter::OnRep_PlayerState()
@@ -76,4 +83,10 @@ void AGCC_PlayerCharacter::OnRep_PlayerState()
 
 	GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(), this);
 	OnASCInitialized.Broadcast(GetAbilitySystemComponent(), GetAttributeSet());
+
+	UGCC_AttributeSet* GCC_AttributeSet = Cast<UGCC_AttributeSet>(GetAttributeSet());
+	if (!IsValid(GCC_AttributeSet)) return;
+	
+	GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(GCC_AttributeSet->GetHealthAttribute()).AddUObject(this, &ThisClass::OnHealthChanged);
+
 }

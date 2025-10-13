@@ -4,6 +4,7 @@
 #include "GASCrashCourse/Public/Characters/GCC_BaseCharacter.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/GCC_AttributeSet.h"
+#include "Net/UnrealNetwork.h"
 
 AGCC_BaseCharacter::AGCC_BaseCharacter()
 {
@@ -11,6 +12,13 @@ AGCC_BaseCharacter::AGCC_BaseCharacter()
 
 	// Tick and refresh bone transforms whether rendered or not - for bone updates on a dedicated server
 	GetMesh()->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
+}
+
+void AGCC_BaseCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ThisClass, bAlive);
 }
 
 UAbilitySystemComponent* AGCC_BaseCharacter::GetAbilitySystemComponent() const
@@ -36,4 +44,27 @@ void AGCC_BaseCharacter::InitializeAttributes() const
 	FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
 	FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(InitializeAttributesEffect, 1.f, ContextHandle);
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+}
+
+void AGCC_BaseCharacter::OnHealthChanged(const FOnAttributeChangeData& AttributeChangeData)
+{
+	if (AttributeChangeData.NewValue <= 0.f)
+	{
+		HandleDeath();
+	}
+}
+
+void AGCC_BaseCharacter::HandleDeath()
+{
+	bAlive = false;
+
+	if (IsValid(GEngine))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("%s has died!"), *GetName()));
+	}
+}
+
+void AGCC_BaseCharacter::HandleRespawn()
+{
+	bAlive = true;
 }
