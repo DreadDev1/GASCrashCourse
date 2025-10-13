@@ -31,7 +31,7 @@ void UGCC_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 
 void UGCC_AttributeSet::OnRep_AttributeInitialized()
 {
-	if (!bAttributeInitialized)
+	if (bAttributeInitialized)
 	{
 		OnAttributesInitialized.Broadcast();
 	}
