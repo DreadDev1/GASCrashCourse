@@ -3,7 +3,9 @@
 
 #include "AbilitySystem/GCC_AttributeSet.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectExtension.h"
+#include "GameplayTags/GCC_Tags.h"
 #include "Net/UnrealNetwork.h"
 
 void UGCC_AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -22,6 +24,13 @@ void UGCC_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 {
 	Super::PostGameplayEffectExecute(Data);
 
+	if (Data.EvaluatedData.Attribute == GetHealthAttribute() && GetHealth() <= 0.f)
+	{
+		FGameplayEventData Payload;
+		Payload.Instigator = Data.Target.GetAvatarActor();
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Data.EffectSpec.GetEffectContext().GetInstigator(), GCCTags::Events::KillScored, Payload);
+	}
+	
 	if (!bAttributeInitialized)
 	{
 		bAttributeInitialized = true;
