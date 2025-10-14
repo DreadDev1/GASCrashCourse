@@ -6,6 +6,12 @@
 #include "AbilitySystem/GCC_AttributeSet.h"
 #include "Net/UnrealNetwork.h"
 
+
+namespace CrashTags
+{
+	const FName Player = FName("Player");
+}
+
 AGCC_BaseCharacter::AGCC_BaseCharacter()
 {
 	PrimaryActorTick.bCanEverTick = false;
