@@ -2,6 +2,12 @@
 
 namespace GCCTags
 {
+	namespace SetByCaller
+	{
+		UE_DEFINE_GAMEPLAY_TAG_COMMENT(Projectile, "GCCTags.SetByCaller.Projectile", "Tag for Set by Caller Magnitude for Projectiles")
+		
+	}
+	
 	namespace Abilities
 	{
 		UE_DEFINE_GAMEPLAY_TAG_COMMENT(ActivateOnGiven, "GCCTags.Abilities.ActivateOnGiven", "Tag for Abilities that should activate immediately once given.")

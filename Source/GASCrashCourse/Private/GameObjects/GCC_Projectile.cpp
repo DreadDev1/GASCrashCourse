@@ -3,12 +3,12 @@
 
 #include "GameObjects/GCC_Projectile.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "Characters/GCC_PlayerCharacter.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "GameplayTags/GCC_Tags.h"
 
-
-// Sets default values
 AGCC_Projectile::AGCC_Projectile()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -31,7 +31,8 @@ void AGCC_Projectile::NotifyActorBeginOverlap(AActor* OtherActor)
 	FGameplayEffectContextHandle ContextHandle = AbilitySystemComponent->MakeEffectContext();
 	FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DamageEffect, 1, ContextHandle);
 
-	// TODO: Use Damage variable for amount of damage to cause
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GCCTags::SetByCaller::Projectile, Damage);
+	
 	AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 
 	SpawnImpactEffects();
